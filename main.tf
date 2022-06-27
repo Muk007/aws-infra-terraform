@@ -8,14 +8,14 @@ module "management-vpc" {
   avail_zone = ["us-east-1a", "us-east-1b"]
   private_avail_zone = ["us-east-1c", "us-east-1d"]
   global_ip = "0.0.0.0/0"
-  namespace = "management"
+  namespace = "production"
 }
 
 module "vpc-configs" {
-#  for_each  = toset(["management", "production", "development"])
-#  namespace = "${each.key}"
+#   for_each  = toset(["management", "production", "development"])
+#   namespace = "${each.key}"
    source = "./vpc-configs"
    vpc_id = "${module.management-vpc.vpc_id}" 
    aws_region = var.aws_region
-   namespace = "management"
+   namespace = "production"
 }

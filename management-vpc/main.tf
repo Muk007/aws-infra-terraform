@@ -33,7 +33,7 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_route_table" "public-rt" {
-  count  = length(var.subnet_cidr)
+  count  = "${var.namespace == "management" ? length(var.subnet_cidr) : 0}"
   vpc_id = "${aws_vpc.vpc.id}"
   route {
     cidr_block = "${var.global_ip}"
@@ -45,7 +45,7 @@ resource "aws_route_table" "public-rt" {
 }
 
 resource "aws_route_table_association" "rt-public-subnet-association" {
-  count          = length(var.subnet_cidr)
+  count          = "${var.namespace == "management" ? length(var.subnet_cidr) : 0}"
   subnet_id      = "${element(aws_subnet.public-subnet.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.public-rt.*.id, count.index)}"
 }
@@ -61,7 +61,7 @@ resource "aws_subnet" "private-subnet" {
 }
 
 resource "aws_route_table" "private-rt" {
-  count  = length(var.private_subnet_cidr)
+  count  = "${var.namespace == "management" ? length(var.private_subnet_cidr) : 0}"
   vpc_id = "${aws_vpc.vpc.id}"
   route {
     cidr_block     = "${var.global_ip}"
@@ -81,7 +81,7 @@ resource "aws_eip" "nat" {
 }
 
 resource "aws_nat_gateway" "gw" {
-  count         = length(var.private_subnet_cidr)
+  count         = "${var.namespace == "management" ? length(var.private_subnet_cidr) : 0}"
   allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
   subnet_id     = "${element(aws_subnet.public-subnet.*.id, count.index)}"
   tags = {
@@ -90,7 +90,7 @@ resource "aws_nat_gateway" "gw" {
 }
 
 resource "aws_route_table_association" "rt-private-subnet-association" {
-  count          = length(var.subnet_cidr)
+  count          = "${var.namespace == "management" ? length(var.subnet_cidr) : 0}"
   subnet_id      = "${element(aws_subnet.private-subnet.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.private-rt.*.id, count.index)}"
 }
