@@ -72,6 +72,15 @@ resource "aws_route_table" "private-rt" {
   }
 }
 
+resource "aws_route_table" "private-rt-optional" {
+  count  = "${var.namespace == "production" || var.namespace == "development" ? length(var.private_subnet_cidr) : 0}"
+  vpc_id = "${aws_vpc.vpc.id}"
+  route = []
+  tags = { 
+    Name = "${local.resource_name_prefix}-privateRouteTable-${count.index + 1}"
+  }
+}
+
 resource "aws_eip" "nat" {
   count = "${var.namespace == "management" ? length(var.private_subnet_cidr) : 0}"
   vpc   = "true"
@@ -93,4 +102,10 @@ resource "aws_route_table_association" "rt-private-subnet-association" {
   count          = "${var.namespace == "management" ? length(var.subnet_cidr) : 0}"
   subnet_id      = "${element(aws_subnet.private-subnet.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.private-rt.*.id, count.index)}"
+}
+
+resource "aws_route_table_association" "rt-private-subnet-association-optional" {
+  count          = "${var.namespace == "development" || var.namespace == "production" ? length(var.subnet_cidr) : 0}"
+  subnet_id      = "${element(aws_subnet.private-subnet.*.id, count.index)}"
+  route_table_id = "${element(aws_route_table.private-rt-optional.*.id, count.index)}"
 }
