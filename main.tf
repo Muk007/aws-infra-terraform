@@ -1,5 +1,5 @@
 module "vpc-dev" {
-  source = "./vpc"
+  source = "./modules/vpc"
   cidr   = "10.0.0.0/16"
   subnet_cidr = ["10.0.1.0/24", "10.0.2.0/24"]
   private_subnet_cidr = ["10.0.3.0/24", "10.0.4.0/24"]
@@ -10,14 +10,14 @@ module "vpc-dev" {
 }
 
 module "vpc-dev-configs" {
-   source = "./vpc-configs"
+   source = "./modules/vpc-configs"
    vpc_id = "${module.vpc-dev.vpc_id}" 
    aws_region = var.aws_region
    namespace = "development"
 }
  
 module "vpc-manage" {
-  source = "./vpc"
+  source = "./modules/vpc"
   cidr   = "10.0.0.0/16"
   subnet_cidr = ["10.0.1.0/24", "10.0.2.0/24"]
   private_subnet_cidr = ["10.0.3.0/24", "10.0.4.0/24"]
@@ -28,7 +28,7 @@ module "vpc-manage" {
 }
 
 module "vpc-manage-configs" {
-   source = "./vpc-configs"
+   source = "./modules/vpc-configs"
    vpc_id = "${module.vpc-manage.vpc_id}"
    aws_region = var.aws_region
    namespace = "management"
