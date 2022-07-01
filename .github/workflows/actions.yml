@@ -48,3 +48,8 @@ jobs:
         run: |
           mkdir terraform/${{ matrix.path }} && cd terraform/${{ matrix.path }}
           terraform apply -auto-approve -input=false
+          
+      - name: Destroy Terraform
+        run: |
+          mkdir terraform/${{ matrix.path }} && cd terraform/${{ matrix.path }}
+          terraform destroy -auto-approve -input=false
