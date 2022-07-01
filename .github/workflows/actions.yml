@@ -34,7 +34,7 @@ jobs:
 
       - name: Initialize Terraform
         run: |
-          cd terraform/${{ matrix.path }}
+          mkdir terraform/${{ matrix.path }} && cd terraform/${{ matrix.path }}
           terraform init -input=false
 
       - name: Plan Terraform
