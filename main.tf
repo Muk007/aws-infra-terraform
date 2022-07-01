@@ -1,3 +1,4 @@
+# This file is also known as child module.
 module "vpc-dev" {
   source = "./modules/vpc"
   cidr   = "10.0.0.0/16"
