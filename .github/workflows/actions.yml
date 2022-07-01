@@ -41,10 +41,10 @@ jobs:
         id: plan
         continue-on-error: true
         run: |
-          cd terraform/${{ matrix.path }}
+          mkdir terraform/${{ matrix.path }} && cd terraform/${{ matrix.path }}
           terraform plan -input=false -no-color
 
       - name: Apply Terraform
         run: |
-          cd terraform/${{ matrix.apth }}
+          mkdir terraform/${{ matrix.path }} && cd terraform/${{ matrix.path }}
           terraform apply -auto-approve -input=false
