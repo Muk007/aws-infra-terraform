@@ -1,25 +1,25 @@
 variable "cidr" {
-  type    = string
+  type = string
 }
 
 variable "subnet_cidr" {
-  type    = list(string)
+  type = list(string)
 }
 
 variable "private_subnet_cidr" {
-  type    = list(string)
+  type = list(string)
 }
 
 variable "avail_zone" {
-  type    = list(string)
+  type = list(string)
 }
 
 variable "private_avail_zone" {
-  type    = list(string)
+  type = list(string)
 }
 
 variable "global_ip" {
-  type    = string
+  type = string
 }
 
 

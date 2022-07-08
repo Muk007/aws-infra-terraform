@@ -1,5 +1,5 @@
 locals {
-  resource_name_prefix = "${var.namespace}"
+  resource_name_prefix = var.namespace
 }
 
 data "aws_vpc" "customer_vpc" {
