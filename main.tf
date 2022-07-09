@@ -1,12 +1,12 @@
 locals {
-  global_ip = "0.0.0.0/0"
-  avail_zone = ["us-east-1a", "us-east-1b"]
+  global_ip          = "0.0.0.0/0"
+  avail_zone         = ["us-east-1a", "us-east-1b"]
   private_avail_zone = ["us-east-1c", "us-east-1d"]
-  aws_region = var.aws_region
-  dev_namespace = "development"
-  manage_namespace = "management"
-  dev_cidr = "10.0.0.0/16"
-  manage_cidr = "20.0.0.0/16"
+  aws_region         = var.aws_region
+  dev_namespace      = "development"
+  manage_namespace   = "management"
+  dev_cidr           = "10.0.0.0/16"
+  manage_cidr        = "20.0.0.0/16"
 }
 
 module "vpc-dev" {
