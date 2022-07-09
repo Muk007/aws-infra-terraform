@@ -47,7 +47,13 @@ module "TGW" {
   subnet_dev                      = concat(module.vpc-dev.subnet_pri, module.vpc-dev.subnet_pub)
   subnet_manage                   = concat(module.vpc-manage.subnet_pub, module.vpc-manage.subnet_pri)
   #dev-rt                          = concat(module.vpc-dev.route_table_pub, module.vpc-dev.route_table_pri_dev)
+  #rt_table_dev_a                  = module.vpc-dev.route_table_pri_dev[0]
+  #rt_table_dev_b		  = module.vpc-dev.route_table_pri_dev[1]
   #dest_dev                        = "20.0.0.0/16"
   #manage-rt                       = concat(module.vpc-manage.route_table_pub, module.vpc-manage.route_table_pri_manage)
+  #rt_table_manage_a		  = module.vpc-manage.route_table_pub[0]
+  #rt_table_manage_b               = module.vpc-manage.route_table_pub[1]
+  #rt_table_manage_c		  = module.vpc-manage.route_table_pri_manage[0]
+  #rt_table_manage_d		  = module.vpc-manage.route_table_pri_manage[1]
   #dest_manage                     = "10.0.0.0/16"
 }

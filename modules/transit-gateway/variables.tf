@@ -55,18 +55,34 @@ variable "subnet_manage" {
   description = ""
 }
 
-# aws route variables
+############# aws route variables
 
-#variable "dev-rt" {
-#  type = list(string)
+#variable "rt_table_dev_a" {
+#  type = string
+#}
+
+#variable "rt_table_dev_b" {
+#  type = string
 #}
 
 #variable "dest_dev" {
 #  type = string
 #}
 
-#variable "manage-rt" {
-#  type = list(string)
+#variable "rt_table_manage_a" {
+#  type = string
+#}
+
+#variable "rt_table_manage_b" {
+#  type = string
+#}
+
+#variable "rt_table_manage_c" {
+#  type = string
+#}
+
+#variable "rt_table_manage_d" {
+#  type = string
 #}
 
 #variable "dest_manage" {

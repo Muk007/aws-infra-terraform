@@ -33,7 +33,7 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_route_table" "public-rt" {
-  count  = var.namespace == "management" ? length(var.subnet_cidr) : 0
+  count  = var.namespace == "management" ? 1 : 0
   vpc_id = aws_vpc.vpc.id
   route {
     cidr_block = var.global_ip
@@ -73,7 +73,7 @@ resource "aws_route_table" "private-rt" {
 }
 
 resource "aws_route_table" "private-rt-optional" {
-  count  = var.namespace == "production" || var.namespace == "development" ? length(var.private_subnet_cidr) : 0
+  count  = var.namespace == "production" || var.namespace == "development" ? 1 : 0
   vpc_id = aws_vpc.vpc.id
   route  = []
   tags = {
