@@ -1,19 +1,23 @@
 locals {
-  global_ip          = "0.0.0.0/0"
-  avail_zone         = ["us-east-1a", "us-east-1b"]
-  private_avail_zone = ["us-east-1c", "us-east-1d"]
-  aws_region         = var.aws_region
-  dev_namespace      = "development"
-  manage_namespace   = "management"
-  dev_cidr           = "10.0.0.0/16"
-  manage_cidr        = "20.0.0.0/16"
+  global_ip                  = "0.0.0.0/0"
+  avail_zone                 = ["us-east-1a", "us-east-1b"]
+  private_avail_zone         = ["us-east-1c", "us-east-1d"]
+  aws_region                 = var.aws_region
+  dev_namespace              = "development"
+  manage_namespace           = "management"
+  dev_cidr                   = "10.0.0.0/16"
+  manage_cidr                = "20.0.0.0/16"
+  dev_subnet_cidr            = ["10.0.1.0/24", "10.0.2.0/24"]
+  dev_private_subnet_cidr    = ["10.0.3.0/24", "10.0.4.0/24"]
+  manage_subnet_cidr         = ["20.0.1.0/24", "20.0.2.0/24"]
+  manage_private_subnet_cidr = ["20.0.3.0/24", "20.0.4.0/24"]
 }
 
 module "vpc-dev" {
   source              = "./modules/vpc"
   cidr                = local.dev_cidr
-  subnet_cidr         = ["10.0.1.0/24", "10.0.2.0/24"]
-  private_subnet_cidr = ["10.0.3.0/24", "10.0.4.0/24"]
+  subnet_cidr         = local.dev_subnet_cidr
+  private_subnet_cidr = local.dev_private_subnet_cidr
   avail_zone          = local.avail_zone
   private_avail_zone  = local.private_avail_zone
   global_ip           = local.global_ip
@@ -30,8 +34,8 @@ module "vpc-dev-configs" {
 module "vpc-manage" {
   source              = "./modules/vpc"
   cidr                = local.manage_cidr
-  subnet_cidr         = ["20.0.1.0/24", "20.0.2.0/24"]
-  private_subnet_cidr = ["20.0.3.0/24", "20.0.4.0/24"]
+  subnet_cidr         = local.manage_subnet_cidr
+  private_subnet_cidr = local.manage_private_subnet_cidr
   avail_zone          = local.avail_zone
   private_avail_zone  = local.private_avail_zone
   global_ip           = local.global_ip
@@ -57,14 +61,10 @@ module "TGW" {
   transit_gateway_cidr_blocks     = null
   subnet_dev                      = concat(module.vpc-dev.subnet_pri, module.vpc-dev.subnet_pub)
   subnet_manage                   = concat(module.vpc-manage.subnet_pub, module.vpc-manage.subnet_pri)
-  #dev-rt                          = concat(module.vpc-dev.route_table_pub, module.vpc-dev.route_table_pri_dev)
-  #rt_table_dev_a                  = module.vpc-dev.route_table_pri_dev[0]
-  #rt_table_dev_b		  = module.vpc-dev.route_table_pri_dev[1]
-  #dest_dev                        = "20.0.0.0/16"
-  #manage-rt                       = concat(module.vpc-manage.route_table_pub, module.vpc-manage.route_table_pri_manage)
-  #rt_table_manage_a		  = module.vpc-manage.route_table_pub[0]
-  #rt_table_manage_b               = module.vpc-manage.route_table_pub[1]
-  #rt_table_manage_c		  = module.vpc-manage.route_table_pri_manage[0]
-  #rt_table_manage_d		  = module.vpc-manage.route_table_pri_manage[1]
-  #dest_manage                     = "10.0.0.0/16"
+  rt_table_dev_a                  = module.vpc-dev.route_table_pri_dev[0]
+  dest_dev                        = local.manage_cidr
+  rt_table_manage_a               = module.vpc-manage.route_table_pub[0]
+  rt_table_manage_c               = module.vpc-manage.route_table_pri_manage[0]
+  rt_table_manage_d               = module.vpc-manage.route_table_pri_manage[1]
+  dest_manage                     = local.dev_cidr
 }
