@@ -8,13 +8,13 @@ data "aws_vpc" "customer_vpc" {
 
 resource "aws_cloudwatch_log_group" "flow_logs" {
   name              = "/${local.resource_name_prefix}/vpc-flowlogs"
-  #retention_in_days = 90
+  retention_in_days = 90
 }
 
 data "aws_iam_policy_document" "vpc_flowlog_policy" {
   statement {
     actions = [
-      "logs:CreateLogGroup",
+      #"logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
       "logs:DescribeLogGroups",
