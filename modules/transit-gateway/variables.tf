@@ -14,35 +14,44 @@ variable "vpc_id_manage" {
   description = "VPC Id for manage"
 }
 
+variable "vpc_id_prod" {
+  type = string
+}
 
 variable "transit_gateway_cidr_blocks" {
   type        = list(string)
   description = "cidr for TGW, pass this value as null"
+  default     = null
 }
 
 variable "vpn_ecmp_support" {
   type        = string
   description = ""
+  default     = "enable"
 }
 
 variable "dns_support" {
   type        = string
   description = ""
+  default     = "enable"
 }
 
 variable "default_route_table_propagation" {
   type        = string
   description = ""
+  default     = "enable"
 }
 
 variable "default_route_table_association" {
   type        = string
   description = ""
+  default     = "enable"
 }
 
 variable "auto_accept_shared_attachments" {
   type        = string
   description = ""
+  default     = "disable"
 }
 
 variable "subnet_dev" {
@@ -55,6 +64,10 @@ variable "subnet_manage" {
   description = ""
 }
 
+variable "subnet_prod" {
+  type = list(string)
+}
+
 ############# aws route variables
 
 variable "rt_table_dev_a" {
@@ -62,7 +75,7 @@ variable "rt_table_dev_a" {
 }
 
 variable "dest_dev" {
-  type = string
+  type = list(string)
 }
 
 variable "rt_table_manage_a" {
@@ -82,5 +95,13 @@ variable "rt_table_manage_d" {
 }
 
 variable "dest_manage" {
+  type = list(string)
+}
+
+variable "rt_table_prod_a" {
   type = string
+}
+
+variable "dest_prod" {
+  type = list(string)
 }

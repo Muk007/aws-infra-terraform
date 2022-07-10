@@ -11,6 +11,10 @@ locals {
   dev_private_subnet_cidr    = ["10.0.3.0/24", "10.0.4.0/24"]
   manage_subnet_cidr         = ["20.0.1.0/24", "20.0.2.0/24"]
   manage_private_subnet_cidr = ["20.0.3.0/24", "20.0.4.0/24"]
+  prod_cidr                  = "30.0.0.0/16"
+  prod_subnet_cidr           = ["30.0.1.0/24", "30.0.2.0/24"]
+  prod_private_subnet_cidr   = ["30.0.3.0/24", "30.0.4.0/24"]
+  prod_namespace             = "production"
 }
 
 module "vpc-dev" {
@@ -49,22 +53,38 @@ module "vpc-manage-configs" {
   namespace  = local.manage_namespace
 }
 
+module "vpc-prod" {
+  source              = "./modules/vpc"
+  cidr                = local.prod_cidr
+  subnet_cidr         = local.prod_subnet_cidr
+  private_subnet_cidr = local.prod_private_subnet_cidr
+  avail_zone          = local.avail_zone
+  private_avail_zone  = local.private_avail_zone
+  global_ip           = local.global_ip
+  namespace           = local.prod_namespace
+}
+
+module "vpc-prod-configs" {
+  source     = "./modules/vpc-configs"
+  vpc_id     = module.vpc-prod.vpc_id
+  aws_region = local.aws_region
+  namespace  = local.prod_namespace
+}
+
 module "TGW" {
   source                          = "./modules/transit-gateway"
   vpc_id_manage                   = module.vpc-manage.vpc_id
   vpc_id_dev                      = module.vpc-dev.vpc_id
-  auto_accept_shared_attachments  = "disable"
-  default_route_table_association = "enable"
-  default_route_table_propagation = "enable"
-  dns_support                     = "enable"
-  vpn_ecmp_support                = "enable"
-  transit_gateway_cidr_blocks     = null
+  vpc_id_prod			  = module.vpc-prod.vpc_id
   subnet_dev                      = concat(module.vpc-dev.subnet_pri, module.vpc-dev.subnet_pub)
   subnet_manage                   = concat(module.vpc-manage.subnet_pub, module.vpc-manage.subnet_pri)
+  subnet_prod                     = concat(module.vpc-prod.subnet_pri, module.vpc-prod.subnet_pub)
   rt_table_dev_a                  = module.vpc-dev.route_table_pri_dev[0]
-  dest_dev                        = local.manage_cidr
+  dest_dev                        = [ local.manage_cidr, local.prod_cidr ]
   rt_table_manage_a               = module.vpc-manage.route_table_pub[0]
   rt_table_manage_c               = module.vpc-manage.route_table_pri_manage[0]
   rt_table_manage_d               = module.vpc-manage.route_table_pri_manage[1]
-  dest_manage                     = local.dev_cidr
+  dest_manage                     = [ local.dev_cidr, local.prod_cidr ]
+  rt_table_prod_a		  = module.vpc-prod.route_table_pri_prod[0]
+  dest_prod			  = [ local.manage_cidr, local.dev_cidr ]
 }

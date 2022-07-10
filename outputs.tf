@@ -7,6 +7,15 @@ output "CW_logGroup_dev" {
   value = module.vpc-dev-configs.log-group-arn
 }
 
+output "vpc_id_prod" {
+  value = module.vpc-prod.vpc_id
+}
+
+
+output "CW_logGroup_prod" {
+  value = module.vpc-prod-configs.log-group-arn
+}
+
 output "vpc_id_manage" {
   value = module.vpc-manage.vpc_id
 }
@@ -24,6 +33,14 @@ output "route_table_id_dev_public" {
   value = module.vpc-dev.route_table_pub
 }
 
+output "route_table_id_prod_private" {
+  value = module.vpc-prod.route_table_pri_prod
+}
+
+output "route_table_id_prod_public" {
+  value = module.vpc-prod.route_table_pub
+}
+
 output "route_table_id_manage_private" {
   value = module.vpc-manage.route_table_pri_manage
 }
@@ -38,6 +55,14 @@ output "subnet_id_dev_private" {
 
 output "subnet_id_dev_public" {
   value = module.vpc-dev.subnet_pub
+}
+
+output "subnet_id_prod_private" {
+  value = module.vpc-prod.subnet_pri
+}
+
+output "subnet_id_prod_public" {
+  value = module.vpc-prod.subnet_pub
 }
 
 output "subnet_id_manage_private" {

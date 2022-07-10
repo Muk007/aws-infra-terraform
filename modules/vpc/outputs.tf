@@ -21,3 +21,7 @@ output "route_table_pri_dev" {
 output "route_table_pri_manage" {
   value = aws_route_table.private-rt.*.id
 }
+
+output "route_table_pri_prod" {
+  value = aws_route_table.private-rt-optional.*.id
+}
